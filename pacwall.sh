@@ -113,6 +113,21 @@ generate_graph_apt() {
     PKGS=packages
 }
 
+generate_graph_brew() {
+    if ! EPKGS=$(brew graph --installed --highlight-leaves); then
+        # not trivial to parse `brew deps --installed` output in bash
+        echo "Requires: martido/homebrew-graph to parse homebrew output in robust way." >&2
+        exit 1
+    fi
+
+    echo "$EPKGS" \
+        | sed -e "s/\[style=filled\]/[style=filled,color=\"$ENODE\"]/" \
+        | sed -e '1d' -e '$d' \
+        > stripped/packages
+
+    PKGS=packages
+}
+
 compile_graph() {
     # Compile the file in DOT languge.
     # The graph is directed and strict (doesn't contain any edge duplicates).
@@ -264,7 +279,10 @@ main() {
         use_wal_colors
     fi
 
-    if command -v apt > /dev/null; then
+    if command -v brew > /dev/null; then
+        echo 'Using brew to generate the graph'
+        generate_graph_brew "$@"
+    elif command -v apt > /dev/null; then
         echo 'Using apt to generate the graph'
         generate_graph_apt
     elif command -v pactree > /dev/null; then
