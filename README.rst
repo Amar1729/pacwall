@@ -48,6 +48,15 @@ Debian, Ubuntu, Mint, Pop!_OS, ...
 
     sudo apt install graphviz
 
+~~~~~
+MacOS
+~~~~~
+
+.. code-block:: bash
+
+    brew install graphviz 
+    brew tap martido/homebrew-graph
+
 ~~~~~~~~~~~~~~~~~~
 Wallpaper backends
 ~~~~~~~~~~~~~~~~~~
